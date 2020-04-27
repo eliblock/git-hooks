@@ -1,0 +1,81 @@
+#!/bin/bash
+# To use this hook, place it in .git/hooks for your repo
+# The file must be named "commit-msg" (no extension)
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Color codes
+red='\033[0;31m'
+yellow='\033[0;33m'
+blue='\033[0;34m'
+green='\033[0;32m'
+NC='\033[0m'
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Utilities
+print_newline_if_needed(){
+  if [ "${errs_found}" -gt 0 ]; then
+    echo -e
+  fi
+}
+
+print_length_error(){
+  # $1 should be the line number in text, e.g., "second"
+  # $2 should be the requirement in text, e.g., "be blank"
+  # $3 should be the line passed through
+  print_newline_if_needed
+  echo -e "${red}The ${1} line of your commit message must ${2}.${NC}"
+  echo -e "  Your ${1} line has ${yellow}${#3}${NC} characters: ${yellow}${3}${NC}"
+}
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Conventional Commit Checker
+line_number=0
+errs_found=0
+while read -r line; do
+  # Skip comments
+  if [ "${line:0:1}" = "#" ]; then
+    continue
+  fi
+
+  # Linewise requirements
+  case ${line_number} in
+    0)
+      if ! [[ ${line} =~ ^((build|chore|ci|docs|feat|fix|perf|refactor|style|test)(\([a-zA-Z0-9]+\))?(!)?: [^ ]+.*$|Merge\ pull) ]]; then
+        print_newline_if_needed
+        echo -e "${red}Please use conventional commit messages:"
+        echo -e "  ${yellow}fix${green}(parser)${NC}: ${blue}properly handle new lines${NC}"
+        echo -e "  ${yellow}^┬^${green}^──┬───^${NC}  ${blue}^───────────────────────^ ─> Summary in present tense.${NC}"
+        echo -e "  ${yellow} │ ${green}   └─> [optional]: Scope of the commit.${NC}"
+        echo -e "  ${yellow} └─> Type: build, chore, ci, docs, feat, fix, perf, refactor, style, test.${NC}"
+        ((errs_found++))
+      fi
+
+      if [ ${#line} -gt 50 ]; then
+        print_length_error "first" "be 50 characters or fewer" "${line}"
+        ((errs_found++))
+      fi
+      ;;
+    1)
+      if [[ ${#line} -gt 0 ]]; then
+        print_length_error "second" "be blank" "${line}"
+        ((errs_found++))
+      fi
+      ;;
+    # *)
+    #   ;;
+  esac
+  ((line_number++))
+done < "${1}"
+
+case ${errs_found} in
+  0)
+    ;;
+  1)
+    print_newline_if_needed
+    echo -e "${red}${errs_found} issue detected with your commit message. Please fix it and try again.${NC}"
+    ;;
+  *)
+    print_newline_if_needed
+    echo -e "${red}${errs_found} issues detected with your commit message. Please fix these and try again.${NC}"
+    ;;
+esac
+
+exit "${errs_found}"
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
