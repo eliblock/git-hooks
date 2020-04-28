@@ -1,0 +1,33 @@
+name: test
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+#   push:
+#     branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  bats:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Install bats
+      timeout-minutes: 3
+      run: |
+        sudo add-apt-repository ppa:duggan/bats
+        sudo apt-get update
+        sudo apt-get install bats
+
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+      timeout-minutes: 1
+
+    - name: bats
+      env:
+        RUNNING_IN_CI: 1
+      run: |
+        cd $GITHUB_WORKSPACE
+        git submodule update --init
+        bats test
