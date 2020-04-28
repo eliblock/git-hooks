@@ -10,7 +10,7 @@ setup() {
 
 @test "commit-msg.bats file passes shellcheck" {
   if [ "${RUNNING_IN_CI}" -eq 1 ]; then
-    skip "shellcheck on ubuntu cannot handle a bats file, so we skip it by setting this variable"
+    skip "shellcheck on ubuntu cannot handle a bats file, so we skip it by setting RUNNING_IN_CI to 1"
   fi
   run which shellcheck # `brew install shellcheck` if this test fails
   refute_output ""
