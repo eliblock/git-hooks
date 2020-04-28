@@ -5,6 +5,14 @@ To install any of the hooks included herein:
 1. Place the file in `.git/hooks/` for the repo to which the hook should apply.
 1. Make the hook executable (`chmod +x .git/hooks/<hook_name>`).
 
+These two steps may be accomplished using `install`:
+```bash
+$ install desired_hook path_to_target_repo/.git/hooks
+
+# For example:
+$ install commit-msg ~/code/my_repo/.git/hooks
+```
+
 ## Development
 ### Writing hooks
 Hooks should be written in `bash` or a `POSIX shell`, e.g., `/bin/sh`.
