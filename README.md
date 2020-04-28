@@ -18,6 +18,8 @@ $ install commit-msg ~/code/my_repo/.git/hooks
 Hooks should be written in `bash` or a `POSIX shell`, e.g., `/bin/sh`.
 
 ### Testing
+![test](https://github.com/eliblock/git-hooks/workflows/test/badge.svg)
+
 Unit testing is handled via `bats` (`brew install bats`).
 Tests may also use `shellcheck` (`brew install shellcheck`).
 
@@ -37,6 +39,7 @@ load 'libs/bats-assert/load' # https://github.com/ztombol/bats-assert
 ```bash
 $ bats test
 ```
+* All bats tests are run on every pull request to master (currently: ![test](https://github.com/eliblock/git-hooks/workflows/test/badge.svg))
 
 ## Included hooks
 ### `commit-msg`
