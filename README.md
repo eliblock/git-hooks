@@ -11,6 +11,7 @@ Hooks should be written in `bash` or a `POSIX shell`, e.g., `/bin/sh`.
 
 ### Testing
 Unit testing is handled via `bats` (`brew install bats`).
+Tests may also use `shellcheck` (`brew install shellcheck`).
 
 * All tests must be in the `test` directory.
 * All tests must be in a file with a `.bats` extension.
