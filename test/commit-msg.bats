@@ -82,7 +82,6 @@ setup() {
   assert_equal "${status}" 1
   assert_failure
   assert_output --partial "conventional commit messages"
-  assert_output --partial "conventional commit messages"
 }
 
 @test "fails one-liner with empty scope" {
@@ -93,7 +92,6 @@ setup() {
 
   assert_equal "${status}" 1
   assert_failure
-  assert_output --partial "conventional commit messages"
   assert_output --partial "conventional commit messages"
 }
 
@@ -177,6 +175,28 @@ setup() {
 @test "fails one-liner with extra space after colon" {
   FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
   echo "feat:  a compliant one-liner" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_equal "${status}" 1
+  assert_failure
+  assert_output --partial "conventional commit messages"
+}
+
+@test "fails zero-liner" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo "" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_equal "${status}" 1
+  assert_failure
+  assert_output --partial "conventional commit messages"
+}
+
+@test "fails blank multi-liner" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "\n\nUseless line here.\n\n\n" > "${FILE}"
 
   run ./commit-msg "${FILE}"
 
