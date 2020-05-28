@@ -49,10 +49,16 @@ for HOOK_FILE in "${HOOKS_TO_INSTALL[@]}"; do
   HOOK_FILE_RELATIVE_TO_SCRIPT="$(dirname "${0}")/${HOOK_FILE}"
 
   if [ -f "${HOOK_FILE_RELATIVE_TO_SCRIPT}" ]; then
-    ln -s "$(realpath "--relative-to=${HOOKS_DIR}" "${HOOK_FILE_RELATIVE_TO_SCRIPT}")" "${HOOKS_DIR}/${HOOK_FILE}"
-    chmod +ux "${HOOK_FILE_RELATIVE_TO_SCRIPT}"
-    echo -e "${green}Installed hook: ${blue}${HOOK_FILE_RELATIVE_TO_SCRIPT}${green}.${NC}"
-    ((successes++))
+    INSTALL_PATH="${HOOKS_DIR}/${HOOK_FILE}"
+    if [ -f "${INSTALL_PATH}" ]; then
+      echo -e "${yellow}Tried to install ${blue}${HOOK_FILE_RELATIVE_TO_SCRIPT}${yellow}, but a hook called ${HOOK_FILE} already exists. Skipping...${NC}"
+      ((warnings_found++))
+    else
+      ln -s "$(realpath "--relative-to=${HOOKS_DIR}" "${HOOK_FILE_RELATIVE_TO_SCRIPT}")" "${INSTALL_PATH}"
+      chmod +ux "${HOOK_FILE_RELATIVE_TO_SCRIPT}"
+      echo -e "${green}Installed hook: ${blue}${HOOK_FILE_RELATIVE_TO_SCRIPT}${green}.${NC}"
+      ((successes++))
+    fi
   else
     echo -e "${yellow}Tried to install ${blue}${HOOK_FILE_RELATIVE_TO_SCRIPT}${yellow}, but no such file exists. Skipping...${NC}"
     ((warnings_found++))

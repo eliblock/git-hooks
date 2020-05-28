@@ -88,12 +88,26 @@ teardown() {
   assert_symlink_to "$(realpath commit-msg)" ".git/hooks/commit-msg"
 }
 
-@test "warns if desired hook is unavailable" {
+@test "warns (and skips) if desired hook is unavailable" {
   git init
 
   run "./install.sh"
   assert_success
   assert_output --partial "no such file"
+  assert_output --partial "1 warning"
+  assert_not_symlink_to "$(realpath commit-msg)" ".git/hooks/commit-msg"
+}
+
+@test "warns (and skips) if hook is already set" {
+  git init
+  cp "${ROOT_DIR}/commit-msg" .
+  touch ".git/hooks/commit-msg"
+  chmod +ux ".git/hooks/commit-msg"
+
+  run "./install.sh"
+  assert_success
+  assert_output --partial "already exists"
+  assert_output --partial "1 warning"
   assert_not_symlink_to "$(realpath commit-msg)" ".git/hooks/commit-msg"
 }
 
