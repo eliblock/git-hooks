@@ -208,6 +208,7 @@ setup() {
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Passes all valid types:
 # build, chore, ci, docs, feat, fix, perf, refactor, style, test
+# also permits wip
 
 @test "passes one-lines with type build" {
   FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
@@ -302,6 +303,16 @@ setup() {
 @test "passes one-lines with type test" {
   FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
   echo "test: a compliant one-liner" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_success
+  assert_output ""
+}
+
+@test "passes one-lines with type wip" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo "wip: a compliant one-liner" > "${FILE}"
 
   run ./commit-msg "${FILE}"
 

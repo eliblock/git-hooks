@@ -37,13 +37,13 @@ while read -r line; do
   # Linewise requirements
   case ${line_number} in
     0)
-      if ! [[ ${line} =~ ^((build|chore|ci|docs|feat|fix|perf|refactor|style|test)(\([a-zA-Z0-9]+\))?(!)?: [^ ]+.*$|Merge\ pull) ]]; then
+      if ! [[ ${line} =~ ^((build|chore|ci|docs|feat|fix|perf|refactor|style|test|wip)(\([a-zA-Z0-9]+\))?(!)?: [^ ]+.*$|Merge\ pull) ]]; then
         print_newline_if_needed
         echo -e "${red}Please use conventional commit messages:"
         echo -e "  ${yellow}fix${green}(parser)${NC}: ${blue}properly handle new lines${NC}"
         echo -e "  ${yellow}^┬^${green}^──┬───^${NC}  ${blue}^───────────────────────^ ─> Summary in present tense.${NC}"
         echo -e "  ${yellow} │ ${green}   └─> [optional]: Scope of the commit.${NC}"
-        echo -e "  ${yellow} └─> Type: build, chore, ci, docs, feat, fix, perf, refactor, style, test.${NC}"
+        echo -e "  ${yellow} └─> Type: build, chore, ci, docs, feat, fix, perf, refactor, style, test, wip.${NC}"
         ((errs_found++))
       fi
 
