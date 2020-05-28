@@ -102,7 +102,6 @@ teardown() {
   git init
   cp "${ROOT_DIR}/commit-msg" .
   touch ".git/hooks/commit-msg"
-  chmod +ux ".git/hooks/commit-msg"
 
   run "./install.sh"
   assert_success
