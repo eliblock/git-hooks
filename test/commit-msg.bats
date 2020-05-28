@@ -207,8 +207,7 @@ setup() {
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Passes all valid types:
-# build, chore, ci, docs, feat, fix, perf, refactor, style, test
-# also permits wip
+# build, chore, ci, docs, feat, fix, perf, refactor, style, test, wip
 
 @test "passes one-lines with type build" {
   FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
