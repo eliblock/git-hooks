@@ -69,6 +69,25 @@ teardown() {
   assert_symlink_to "$(realpath commit-msg)" ".git/hooks/commit-msg"
 }
 
+@test "properly indempotent" {
+  git init
+  cp "${ROOT_DIR}/commit-msg" .
+
+  run "./install.sh"
+  assert_success
+  assert_symlink_to "$(realpath commit-msg)" ".git/hooks/commit-msg"
+
+  run "./install.sh"
+  assert_success
+  assert_symlink_to "$(realpath commit-msg)" ".git/hooks/commit-msg"
+
+  rm ".git/hooks/commit-msg"
+  assert_not_symlink_to "$(realpath commit-msg)" ".git/hooks/commit-msg"
+  run "./install.sh"
+  assert_success
+  assert_symlink_to "$(realpath commit-msg)" ".git/hooks/commit-msg"
+}
+
 @test "warns if desired hook is unavailable" {
   git init
 
