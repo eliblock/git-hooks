@@ -24,17 +24,57 @@ green='\033[0;32m'
 NC='\033[0m'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Utilities
-ROOT_DIR=$(git rev-parse --show-toplevel)
-HOOKS_DIR="${ROOT_DIR}/.git/hooks"
-
 exit_if_errors(){
   if [ "${errs_found}" -gt 0 ]; then
+    print_results
     exit "${errs_found}"
   fi
 }
 
+print_results(){
+  case ${successes} in
+    0)
+      echo
+      echo -e -n "${red}${successes} hooks successfully installed"
+      ;;
+    1)
+      echo
+      echo -e -n "${green}${successes} hook successfully installed"
+      ;;
+    *)
+      echo
+      echo -e -n "${green}${successes} hooks successfully installed"
+      ;;
+  esac
+
+  case ${warnings_found} in
+    0)
+      ;;
+    1)
+      echo -e -n ", ${yellow}${warnings_found} warning"
+      ;;
+    *)
+      echo -e -n ", ${yellow}${warnings_found} warnings"
+      ;;
+  esac
+
+  case ${errs_found} in
+    0)
+      echo -e ".${NC}"
+      ;;
+    1)
+      echo -e ", ${red}${errs_found} error.${NC}"
+      ;;
+    *)
+      echo -e ", ${red}${errs_found} errors.${NC}"
+      ;;
+  esac
+}
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Installation
+ROOT_DIR=$(git rev-parse --show-toplevel)
+HOOKS_DIR="${ROOT_DIR}/.git/hooks"
 errs_found=0
 warnings_found=0
 successes=0
@@ -65,43 +105,6 @@ for HOOK_FILE in "${HOOKS_TO_INSTALL[@]}"; do
   fi
 done
 
+print_results
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Print result
-case ${successes} in
-  0)
-    echo
-    echo -e -n "${red}${successes} hooks successfully installed"
-    ;;
-  1)
-    echo
-    echo -e -n "${green}${successes} hook successfully installed"
-    ;;
-  *)
-    echo
-    echo -e -n "${green}${successes} hooks successfully installed"
-    ;;
-esac
-
-case ${warnings_found} in
-  0)
-    ;;
-  1)
-    echo -e -n ", ${yellow}${warnings_found} warning"
-    ;;
-  *)
-    echo -e -n ", ${yellow}${warnings_found} warnings"
-    ;;
-esac
-
-case ${errs_found} in
-  0)
-    echo -e ".${NC}"
-    ;;
-  1)
-    echo -e ", ${red}${errs_found} error.${NC}"
-    ;;
-  *)
-    echo -e ", ${red}${errs_found} errors.${NC}"
-    ;;
-esac
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
