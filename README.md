@@ -13,6 +13,14 @@ $ install desired_hook path_to_target_repo/.git/hooks
 $ install commit-msg ~/code/my_repo/.git/hooks
 ```
 
+## Installation (to another git repo)
+1. Copy the desired hooks into any directory within your target git repo. I recommend making a new directory called `.git-hooks` at the root of your repo for this purpose.
+1. Copy `install.sh` to the same directory that you copied the hooks to. Ensure it is executable.
+1. Change directories into your git repo, and run the installation script.
+  * By default, this script will attempt to install all of the hooks provided herein.
+  * If desired, you can modify the configuration section of the installation script to include only specific hooks you wish to install.
+1. [Optional] Check both your hooks and the installation script into source control, and instruct other developers to run the installation script in their local copy of the repo.
+
 ## Development
 ### Writing hooks
 Hooks should be written in `bash` or a `POSIX shell`, e.g., `/bin/sh`.
