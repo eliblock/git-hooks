@@ -17,9 +17,9 @@ $ install commit-msg ~/code/my_repo/.git/hooks
 1. Copy the desired hooks into any directory within your target git repo. I recommend making a new directory called `.git-hooks` at the root of your repo for this purpose.
 1. Copy `install.sh` to the same directory that you copied the hooks to. Ensure it is executable.
 1. Change directories into your git repo, and run the installation script.
-  * By default, this script will attempt to install all of the hooks provided herein.
-  * If desired, you can modify the configuration section of the installation script to include only specific hooks you wish to install.
-  * This script will not overwrite any git hooks you already have set for your repo. If you would like to overwrite a pre-existing git hook, first manually delete the old hook and then re-run the installation script.
+    * By default, this script will attempt to install all of the hooks provided herein.
+    * If desired, you can modify the configuration section of the installation script to include only specific hooks you wish to install.
+    * This script will not overwrite any git hooks you already have set for your repo. If you would like to overwrite a pre-existing git hook, first manually delete the old hook and then re-run the installation script.
 1. [Optional] Check both your hooks and the installation script into source control, and instruct other developers to run the installation script in their local copy of the repo.
 
 ## Development
