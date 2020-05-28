@@ -11,7 +11,7 @@ To install any hooks in a way that can be used by other developers of your repo,
     * This script will not overwrite any git hooks you already have set for your repo. If you would like to overwrite a pre-existing git hook, first manually delete the old hook and then re-run the installation script.
 1. _Optional but recommended:_ Check both your hooks and the installation script into source control, and instruct other developers to run the installation script in their local copy of the repo (add it to your README!).
 
-Sample commands to run after cloning this repo:
+Sample commands to run after cloning and opening this repo:
 ```bash
 $ mkdir ~/<target-repo>/.git-hooks
 $ cp * ~/<target-repo>/.git-hooks/
@@ -60,7 +60,7 @@ Tests may also use `shellcheck` (`brew install shellcheck`).
 $ bats test
 ```
 * All bats tests are run on every pull request to master (most recently: ![test](https://github.com/eliblock/git-hooks/workflows/test/badge.svg))
-* Two helper libraries for bats are bundled via git submodules at `./test/libs/bats-assert` and `./test/libs/bats-support`. To use these libraries, you must download them:
+* Three helper libraries for bats are bundled via git submodules at `./test/libs/bats-assert`, `./test/libs/bats-support`, and `./test/libs/bats-file`. To use these libraries, you must download them:
 ```bash
 $ git submodule update --init
 ```
@@ -69,6 +69,7 @@ $ git submodule update --init
 #!/usr/bin/env bats
 load 'libs/bats-support/load' # https://github.com/ztombol/bats-support
 load 'libs/bats-assert/load' # https://github.com/ztombol/bats-assert
+load 'libs/bats-file/load' # https://github.com/bats-core/bats-assert
 ```
 
 ## Included hooks

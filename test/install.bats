@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 load 'libs/bats-support/load' # https://github.com/ztombol/bats-support
 load 'libs/bats-assert/load' # https://github.com/ztombol/bats-assert
-load 'libs/bats-file/load'
+load 'libs/bats-file/load' # https://github.com/bats-core/bats-assert
 
 setup() {
     if [ "${BATS_TEST_NUMBER}" = 1 ];then
