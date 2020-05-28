@@ -1,7 +1,7 @@
 # git-hooks
 A collection of useful git hooks!
 ## Usage
-To install any hooks in a way that can be used by other developers of your repo, use `install.sh`.
+To install any hooks in a way that can be used by other developers of your repo use `install.sh`.
 ### Installing hooks with `install.sh`
 1. Copy the desired hooks into any directory within your target git repo. I recommend making a new directory called `.git-hooks` at the root of your repo for this purpose.
 1. Copy `install.sh` to the same directory that you copied the hooks to. Ensure it is executable.
