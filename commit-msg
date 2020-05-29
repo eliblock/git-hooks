@@ -87,14 +87,12 @@ while read -r line; do
       fi
       ;;
     *)
-      if [[ ${#line} -gt 72 ]]; then
-        case ${warns_found} in
-          0)
+      if [ ${#line} -gt 72 ]; then
+        if [ ${warns_found} -eq 0 ]; then
           print_newline_if_needed
           echo -e "${yellow}Human readable lines in commit message body should be 72 characters or shorter.${NC}"
           echo -e "${yellow}If lines violate this warning, use git commit --amend to fix them.${NC}"
-          ;;
-        esac
+        fi
         echo -e "  Line #$((line_number+1)) has ${yellow}${#line}${NC} characters: ${yellow}${line}${NC}"
         ((warns_found++))
       fi
