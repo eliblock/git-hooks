@@ -68,11 +68,17 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Simple cases (fails):
+@test "fails if not passed a valid file" {
+  run ./commit-msg
+
+  assert_failure
+  assert_output --partial "No such file"
+}
+
 @test "fails noncompliant one-liner" {
   FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
   echo "a non-compliant one-liner" > "${FILE}"
