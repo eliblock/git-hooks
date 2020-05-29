@@ -395,6 +395,7 @@ setup() {
   assert_failure
   assert_output --partial "conventional commit messages"
   assert_output --partial "72 characters"
+  assert_output --partial "Line #3 has"
 }
 
 @test "warns compliant multi-liner with 73 character 3rd line" {

@@ -34,6 +34,27 @@ print_length_warning(){
   # ${1} line of your commit message must ${2}.${NC}"
   echo -e "  Line \#${1} has ${yellow}${#3}${NC} characters: ${yellow}${3}${NC}"
 }
+
+print_result(){
+  # $1 should be the error or warning counter, e.g., "${errs_found}"
+  # $2 should be what to print if the counter is 0
+  # $3 should be what to print if the counter is 1
+  # $4 should be what to print for all other counter values
+  case "${1}" in
+  0)
+    print_newline_if_needed
+    echo -e "${2}"
+    ;;
+  1)
+    print_newline_if_needed
+    echo -e "${3}"
+    ;;
+  *)
+    print_newline_if_needed
+    echo -e "${4}"
+    ;;
+esac
+}
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Conventional Commit Checker
 line_number=0
@@ -92,31 +113,19 @@ while read -r line; do
   ((line_number++))
 done < "${1}"
 
-case ${warns_found} in
-  0)
-    ;;
-  1)
-    print_newline_if_needed
-    echo -e "${yellow}${warns_found} warning detected with your commit message. Please fix it using git commit --amend.${NC}"
-    ;;
-  *)
-    print_newline_if_needed
-    echo -e "${yellow}${warns_found} warnings detected with your commit message. Please fix these using git commit --amend.${NC}"
-    ;;
-esac
+print_result "${warns_found}" \
+             "" \
+             "${yellow}${warns_found} warning detected with your commit message.\n\
+Please fix it using git commit --amend.${NC}" \
+             "${yellow}${warns_found} warnings detected with your commit message.\n\
+Please fix them using git commit --amend.${NC}"
 
-case ${errs_found} in
-  0)
-    echo -e "${green}\xE2\x9C\x94${NC} commit message follows conventional commits syntax.";;
-  1)
-    print_newline_if_needed
-    echo -e "${red}${errs_found} issue detected with your commit message. Please fix it and try again.${NC}"
-    ;;
-  *)
-    print_newline_if_needed
-    echo -e "${red}${errs_found} issues detected with your commit message. Please fix these and try again.${NC}"
-    ;;
-esac
+print_result "${errs_found}" \
+             "${green}\xE2\x9C\x94${NC} commit message follows conventional commits syntax." \
+             "${red}${errs_found} issue detected with your commit message. \
+Please fix it and try again.${NC}" \
+             "${red}${errs_found} issues detected with your commit message. \
+Please fix these and try again.${NC}"
 
 exit "${errs_found}"
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
