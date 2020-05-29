@@ -17,7 +17,6 @@ setup() {
 
   run shellcheck "${BATS_TEST_FILENAME}"
   assert_success
-  assert_output ""
 }
 
 @test "commit-msg file passes shellcheck" {
@@ -26,7 +25,6 @@ setup() {
 
   run shellcheck commit-msg
   assert_success
-  assert_output ""
 }
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -38,7 +36,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
+  assert_output "✔ commit message follows conventional commits syntax"
 }
 
 @test "passes compliant one-liner with scope" {
@@ -48,7 +46,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "passes compliant one-liner with bang" {
@@ -58,7 +55,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "passes compliant one-liner with scope and bang" {
@@ -222,7 +218,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "passes one-lines with type chore" {
@@ -232,7 +227,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "passes one-lines with type ci" {
@@ -242,7 +236,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "passes one-lines with type docs" {
@@ -252,7 +245,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "passes one-lines with type feat" {
@@ -262,7 +254,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "passes one-lines with type fix" {
@@ -272,7 +263,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "passes one-lines with type perf" {
@@ -282,7 +272,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "passes one-lines with type refactor" {
@@ -292,7 +281,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "passes one-lines with type style" {
@@ -302,7 +290,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "passes one-lines with type test" {
@@ -312,7 +299,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "passes one-lines with type wip" {
@@ -322,7 +308,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -335,7 +320,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "fails compliant one-liner with 51 characters" {
@@ -370,7 +354,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "fails if second line isn't blank" {
@@ -393,7 +376,6 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }
 
 @test "skips second line comment" {
@@ -403,5 +385,4 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output ""
 }

@@ -72,7 +72,7 @@ done < "${1}"
 
 case ${errs_found} in
   0)
-    ;;
+    echo -e "\xE2\x9C\x94 commit message follows conventional commits syntax";;
   1)
     print_newline_if_needed
     echo -e "${red}${errs_found} issue detected with your commit message. Please fix it and try again.${NC}"
