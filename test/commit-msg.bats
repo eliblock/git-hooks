@@ -36,7 +36,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output "✔ commit message follows conventional commits syntax"
+  assert_output --partial " commit message follows conventional commits syntax"
 }
 
 @test "passes compliant one-liner with scope" {
