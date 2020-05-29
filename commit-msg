@@ -11,7 +11,7 @@ NC='\033[0m'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Utilities
 print_newline_if_needed(){
-  if [ "${errs_found}" -gt 0 ]; then
+  if [ "${errs_found}" -gt 0 ] || [ "${warns_found}" -gt 0 ]; then
     echo -e
   fi
 }
@@ -24,10 +24,21 @@ print_length_error(){
   echo -e "${red}The ${1} line of your commit message must ${2}.${NC}"
   echo -e "  Your ${1} line has ${yellow}${#3}${NC} characters: ${yellow}${3}${NC}"
 }
+
+print_length_warning(){
+  # $1 should be the line number as a numeral, e.g., "4"
+  # $2 should be the requirement in text, e.g., "be blank"
+  # $3 should be the line passed through
+  print_newline_if_needed
+  echo -e "${yellow}Human readable lines in commit message body should be 72 characters or shorter.${NC}"
+  # ${1} line of your commit message must ${2}.${NC}"
+  echo -e "  Line \#${1} has ${yellow}${#3}${NC} characters: ${yellow}${3}${NC}"
+}
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Conventional Commit Checker
 line_number=0
 errs_found=0
+warns_found=0
 
 if ! [ -f "${1}" ]; then
   echo -e "${red}No such file or directory \"${1}\". Try again with a valid file.${NC}"
@@ -64,15 +75,39 @@ while read -r line; do
         ((errs_found++))
       fi
       ;;
-    # *)
-    #   ;;
+    *)
+      if [[ ${#line} -gt 72 ]]; then
+        case ${warns_found} in
+          0)
+          print_newline_if_needed
+          echo -e "${yellow}Human readable lines in commit message body should be 72 characters or shorter.${NC}"
+          echo -e "${yellow}If lines violate this warning, use git commit --amend to fix them.${NC}"
+          ;;
+        esac
+        echo -e "  Line #$((line_number+1)) has ${yellow}${#line}${NC} characters: ${yellow}${line}${NC}"
+        ((warns_found++))
+      fi
+      ;;
   esac
   ((line_number++))
 done < "${1}"
 
+case ${warns_found} in
+  0)
+    ;;
+  1)
+    print_newline_if_needed
+    echo -e "${yellow}${warns_found} warning detected with your commit message. Please fix it using git commit --amend.${NC}"
+    ;;
+  *)
+    print_newline_if_needed
+    echo -e "${yellow}${warns_found} warnings detected with your commit message. Please fix these using git commit --amend.${NC}"
+    ;;
+esac
+
 case ${errs_found} in
   0)
-    echo -e "${green}\xE2\x9C\x94${NC} commit message follows conventional commits syntax";;
+    echo -e "${green}\xE2\x9C\x94${NC} commit message follows conventional commits syntax.";;
   1)
     print_newline_if_needed
     echo -e "${red}${errs_found} issue detected with your commit message. Please fix it and try again.${NC}"
