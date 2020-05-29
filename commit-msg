@@ -25,16 +25,6 @@ print_length_error(){
   echo -e "  Your ${1} line has ${yellow}${#3}${NC} characters: ${yellow}${3}${NC}"
 }
 
-print_length_warning(){
-  # $1 should be the line number as a numeral, e.g., "4"
-  # $2 should be the requirement in text, e.g., "be blank"
-  # $3 should be the line passed through
-  print_newline_if_needed
-  echo -e "${yellow}Human readable lines in commit message body should be 72 characters or shorter.${NC}"
-  # ${1} line of your commit message must ${2}.${NC}"
-  echo -e "  Line \#${1} has ${yellow}${#3}${NC} characters: ${yellow}${3}${NC}"
-}
-
 print_result(){
   # $1 should be the error or warning counter, e.g., "${errs_found}"
   # $2 should be what to print if the counter is 0
