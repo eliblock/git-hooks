@@ -2,6 +2,8 @@
 load 'libs/bats-support/load' # https://github.com/ztombol/bats-support
 load 'libs/bats-assert/load' # https://github.com/ztombol/bats-assert
 
+SUCCESS_MESSAGE_SNIPPET=" commit message follows conventional commits syntax"
+
 setup() {
     if [ "${BATS_TEST_NUMBER}" = 1 ];then
         echo "# ----- $(basename "${BATS_TEST_FILENAME}") ----- " >&3
@@ -36,7 +38,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
-  assert_output --partial " commit message follows conventional commits syntax"
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "passes compliant one-liner with scope" {
@@ -46,6 +48,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "passes compliant one-liner with bang" {
@@ -55,6 +58,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "passes compliant one-liner with scope and bang" {
@@ -64,6 +68,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -218,6 +223,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "passes one-lines with type chore" {
@@ -227,6 +233,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "passes one-lines with type ci" {
@@ -236,6 +243,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "passes one-lines with type docs" {
@@ -245,6 +253,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "passes one-lines with type feat" {
@@ -254,6 +263,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "passes one-lines with type fix" {
@@ -263,6 +273,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "passes one-lines with type perf" {
@@ -272,6 +283,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "passes one-lines with type refactor" {
@@ -281,6 +293,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "passes one-lines with type style" {
@@ -290,6 +303,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "passes one-lines with type test" {
@@ -299,6 +313,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "passes one-lines with type wip" {
@@ -308,6 +323,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -320,6 +336,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "fails compliant one-liner with 51 characters" {
@@ -354,6 +371,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "fails if second line isn't blank" {
@@ -376,6 +394,7 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
 @test "skips second line comment" {
@@ -385,4 +404,5 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
