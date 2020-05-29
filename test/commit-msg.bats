@@ -385,6 +385,73 @@ setup() {
   assert_output --partial "must be blank"
 }
 
+@test "fails and warns non-compliant multi-liner with 73 character 3rd line" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "a non-compliant multi-liner\n\n1234567890123456789012345678901234567890123456789012345678901234567890123" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_equal "${status}" 1
+  assert_failure
+  assert_output --partial "conventional commit messages"
+  assert_output --partial "72 characters"
+  assert_output --partial "Line #3 has"
+}
+
+@test "warns compliant multi-liner with 73 character 3rd line" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "feat(asdf)!: a compliant multi-liner\n\n1234567890123456789012345678901234567890123456789012345678901234567890123" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_success
+  assert_output --partial "72 characters"
+  assert_output --partial "Line #3 has"
+}
+
+@test "warns compliant multi-liner with 73 character 4th line" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "feat(asdf)!: a compliant multi-liner\n\nValid line\n1234567890123456789012345678901234567890123456789012345678901234567890123\nValid line" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_success
+  assert_output --partial "72 characters"
+  assert_output --partial "Line #4 has"
+}
+
+@test "warns compliant multi-liner with multiple too-long body lines" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "feat(asdf)!: a compliant multi-liner\n\n1234567890123456789012345678901234567890123456789012345678901234567890123\n1234567890123456789012345678901234567890123456789012345678901234567890123" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_success
+  assert_output --partial "72 characters"
+  assert_output --partial "Line #3 has"
+  assert_output --partial "Line #4 has"
+}
+
+@test "does not warn compliant multi-liner with 74 character comment in 4th line" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "feat(asdf)!: a compliant multi-liner\n\nValid line\n#1234567890123456789012345678901234567890123456789012345678901234567890123\nValid line" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_success
+  refute_output --partial "72 characters"
+}
+
+@test "passes compliant multi-liner with 72 character 3rd line" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "feat(asdf)!: a compliant multi-liner\n\n123456789012345678901234567890123456789012345678901234567890123456789012" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
+}
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Comments:
 @test "skips first line comment" {
