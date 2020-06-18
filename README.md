@@ -59,7 +59,7 @@ Tests may also use `shellcheck` (`brew install shellcheck`).
 ```bash
 $ bats test
 ```
-* All bats tests are run on every pull request to master (most recently: ![test](https://github.com/eliblock/git-hooks/workflows/test/badge.svg))
+* All bats tests are run on every pull request to `main` (most recently: ![test](https://github.com/eliblock/git-hooks/workflows/test/badge.svg))
 * Three helper libraries for bats are bundled via git submodules at `./test/libs/bats-assert`, `./test/libs/bats-support`, and `./test/libs/bats-file`. To use these libraries, you must download them:
 ```bash
 $ git submodule update --init
