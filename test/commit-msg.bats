@@ -473,3 +473,16 @@ setup() {
   assert_success
   assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Fixup commits:
+@test "skips fixup commits" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "fixup! feat: an old commit message" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_success
+  assert_output --partial "fixup commits"
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
+}

@@ -66,6 +66,10 @@ while read -r line; do
   case ${line_number} in
     0)
       if ! [[ ${line} =~ ^((build|chore|ci|docs|feat|fix|perf|refactor|style|test|wip)(\([a-zA-Z0-9]+\))?(!)?: [^ ]+.*$|Merge\ pull) ]]; then
+        if [ "${line:0:7}" = "fixup! " ]; then
+          echo -e "${yellow}Conventional commit message check skipped on fixup commits.${NC}"
+          break;
+        fi
         print_newline_if_needed
         echo -e "${red}Please use conventional commit messages:"
         echo -e "  ${yellow}fix${green}(parser)${NC}: ${blue}properly handle new lines${NC}"
