@@ -3,6 +3,7 @@ load 'libs/bats-support/load' # https://github.com/ztombol/bats-support
 load 'libs/bats-assert/load' # https://github.com/ztombol/bats-assert
 
 SUCCESS_MESSAGE_SNIPPET=" commit message follows conventional commits syntax"
+FIXUP_MESSAGE="Conventional commit message check skipped on fixup commits."
 
 setup() {
     if [ "${BATS_TEST_NUMBER}" = 1 ];then
@@ -471,5 +472,52 @@ setup() {
   run ./commit-msg "${FILE}"
 
   assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
+}
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Fixup commits:
+@test "skips fixup commits (conventional format)" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "fixup! feat: an old commit message" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_success
+  assert_output --partial "${FIXUP_MESSAGE}"
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
+}
+
+@test "skips fixup commits (long first line)" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "fixup! 01234567890123456789012345678901234567890123456789" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_success
+  assert_output --partial "${FIXUP_MESSAGE}"
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
+}
+
+@test "skips fixup commits (empty second line)" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "fixup! feat: an old commit message\nNot empty!\n" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_success
+  assert_output --partial "${FIXUP_MESSAGE}"
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
+}
+
+@test "skips fixup commits (long body lines)" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "fixup! feat: an old commit message\n\nValid line\n1234567890123456789012345678901234567890123456789012345678901234567890123\nValid line" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_success
+  assert_output --partial "${FIXUP_MESSAGE}"
+  refute_output --partial "72"
   assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
