@@ -65,10 +65,14 @@ while read -r line; do
   # Linewise requirements
   case ${line_number} in
     0)
-      if ! [[ ${line} =~ ^((build|chore|ci|docs|feat|fix|perf|refactor|style|test|wip)(\([a-zA-Z0-9]+\))?(!)?: [^ ]+.*$|Merge\ pull) ]]; then
+      if ! [[ ${line} =~ ^((build|chore|ci|docs|feat|fix|perf|refactor|style|test|wip)(\([a-zA-Z0-9]+\))?(!)?: [^ ]+.*$) ]]; then
         if [ "${line:0:7}" = "fixup! " ]; then
           echo -e "${yellow}Conventional commit message check skipped on fixup commits.${NC}"
           break;
+        elif [[ "${line:0:6}" = "Merge " ]]; then
+          echo -e "${yellow}Conventional commit first-line check skipped on merge commits.${NC}"
+          ((line_number++))
+          continue;
         fi
         print_newline_if_needed
         echo -e "${red}Please use conventional commit messages:"
