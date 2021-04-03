@@ -214,6 +214,68 @@ setup() {
 }
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Simple cases (skips):
+@test "ignores single-line merge commits" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo "Merge pull request #123" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_equal "${status}" 0
+  assert_success
+  assert_output --partial "skipped on merge commits"
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
+}
+
+@test "catches failures after first line in merge commits" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "Merge pull request #123\nbad second line" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_equal "${status}" 1
+  assert_failure
+  assert_output --partial "skipped on merge commits"
+  assert_output --partial "must be blank"
+}
+
+@test "ignores single-line revert commits (titlecase)" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo "Revert a broken thing" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_equal "${status}" 0
+  assert_success
+  assert_output --partial "skipped on revert commits"
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
+}
+
+@test "ignores single-line revert commits (lowercase)" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo "revert a broken thing" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_equal "${status}" 0
+  assert_success
+  assert_output --partial "skipped on revert commits"
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
+}
+
+@test "catches failures after first line in merge commits" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo -e "Revert a broken thing\nbad second line" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_equal "${status}" 1
+  assert_failure
+  assert_output --partial "skipped on revert commits"
+  assert_output --partial "must be blank"
+}
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Passes all valid types:
 # build, chore, ci, docs, feat, fix, perf, refactor, style, test, wip
 

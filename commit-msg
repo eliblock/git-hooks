@@ -47,7 +47,7 @@ esac
 }
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Conventional Commit Checker
-line_number=0
+line_number=-1
 errs_found=0
 warns_found=0
 
@@ -62,13 +62,21 @@ while read -r line; do
     continue
   fi
 
+  ((line_number++))
+
   # Linewise requirements
   case ${line_number} in
     0)
-      if ! [[ ${line} =~ ^((build|chore|ci|docs|feat|fix|perf|refactor|style|test|wip)(\([a-zA-Z0-9]+\))?(!)?: [^ ]+.*$|Merge\ pull) ]]; then
+      if ! [[ ${line} =~ ^((build|chore|ci|docs|feat|fix|perf|refactor|style|test|wip)(\([a-zA-Z0-9]+\))?(!)?: [^ ]+.*$) ]]; then
         if [ "${line:0:7}" = "fixup! " ]; then
           echo -e "${yellow}Conventional commit message check skipped on fixup commits.${NC}"
           break;
+        elif [[ "${line:0:6}" = "Merge " ]]; then
+          echo -e "${yellow}Conventional commit first-line check skipped on merge commits.${NC}"
+          continue;
+        elif [[ "${line:0:7}" = "Revert " ]] || [[ "${line:0:7}" = "revert " ]]; then
+          echo -e "${yellow}Conventional commit first-line check skipped on revert commits.${NC}"
+          continue;
         fi
         print_newline_if_needed
         echo -e "${red}Please use conventional commit messages:"
@@ -102,7 +110,6 @@ while read -r line; do
       fi
       ;;
   esac
-  ((line_number++))
 done < "${1}"
 
 print_result "${warns_found}" \
