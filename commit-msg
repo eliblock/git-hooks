@@ -67,14 +67,16 @@ while read -r line; do
   # Linewise requirements
   case ${line_number} in
     0)
-      if ! [[ ${line} =~ ^((build|chore|ci|docs|feat|fix|perf|refactor|style|test|wip)(\([a-zA-Z0-9]+\))?(!)?: [^ ]+.*$) ]]; then
-        if [ "${line:0:7}" = "fixup! " ]; then
+      downcase_line=$(echo "$line" | tr '[:upper:]' '[:lower:]')
+
+      if ! [[ ${downcase_line} =~ ^((build|chore|ci|docs|feat|fix|perf|refactor|style|test|wip)(\([a-zA-Z0-9]+\))?(!)?: [^ ]+.*$) ]]; then
+        if [ "${downcase_line:0:7}" = "fixup! " ]; then
           echo -e "${yellow}Conventional commit message check skipped on fixup commits.${NC}"
           break;
-        elif [[ "${line:0:6}" = "Merge " ]]; then
+        elif [[ "${downcase_line:0:6}" = "merge " ]]; then
           echo -e "${yellow}Conventional commit first-line check skipped on merge commits.${NC}"
           continue;
-        elif [[ "${line:0:7}" = "Revert " ]] || [[ "${line:0:7}" = "revert " ]]; then
+        elif [[ "${downcase_line:0:7}" = "revert " ]]; then
           echo -e "${yellow}Conventional commit first-line check skipped on revert commits.${NC}"
           continue;
         fi
