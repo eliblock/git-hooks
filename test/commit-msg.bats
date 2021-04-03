@@ -236,7 +236,7 @@ setup() {
   assert_equal "${status}" 1
   assert_failure
   assert_output --partial "skipped on merge commits"
-  assert_output --partial  "must be blank"
+  assert_output --partial "must be blank"
 }
 
 @test "ignores single-line revert commits (titlecase)" {
@@ -272,7 +272,7 @@ setup() {
   assert_equal "${status}" 1
   assert_failure
   assert_output --partial "skipped on revert commits"
-  assert_output --partial  "must be blank"
+  assert_output --partial "must be blank"
 }
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
