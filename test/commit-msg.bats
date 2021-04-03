@@ -42,9 +42,29 @@ setup() {
   assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
 }
 
+@test "passes compliant one-liner with mixed cased type" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo "fEaT: a compliant one-liner" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
+}
+
 @test "passes compliant one-liner with scope" {
   FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
   echo "feat(location): a compliant one-liner" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_success
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
+}
+
+@test "passes compliant one-liner with mixed casescope" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo "feat(lOcAtIoN): a compliant one-liner" > "${FILE}"
 
   run ./commit-msg "${FILE}"
 
@@ -215,9 +235,21 @@ setup() {
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Simple cases (skips):
-@test "ignores single-line merge commits" {
+@test "ignores single-line merge commits (titlecase)" {
   FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
   echo "Merge pull request #123" > "${FILE}"
+
+  run ./commit-msg "${FILE}"
+
+  assert_equal "${status}" 0
+  assert_success
+  assert_output --partial "skipped on merge commits"
+  assert_output --partial "${SUCCESS_MESSAGE_SNIPPET}"
+}
+
+@test "ignores single-line merge commits (lowercase)" {
+  FILE="${BATS_TMPDIR}/${BATS_TEST_NUMBER}"
+  echo "merge pull request #123" > "${FILE}"
 
   run ./commit-msg "${FILE}"
 
